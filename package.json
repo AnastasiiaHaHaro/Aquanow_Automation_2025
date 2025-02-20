@@ -1,0 +1,22 @@
+{
+  "name": "aquanow_automation_anastasia_haharo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "ts-node -O '{\"module\":\"CommonJS\"}' node_modules/playwright/test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.50.1",
+    "@types/node": "^22.13.4"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.5.0",
+    "axios": "^1.7.9",
+    "base32-decode": "^1.0.0",
+    "dotenv": "^16.4.7"
+  }
+}
