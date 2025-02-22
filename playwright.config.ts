@@ -10,7 +10,7 @@ export default defineConfig({
     headless: false, 
     baseURL: 'https://admin-dev.aquanow.io',
     extraHTTPHeaders: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-amz-json-1.1",
     },
   },
 

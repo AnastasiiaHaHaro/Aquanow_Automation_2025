@@ -1,18 +1,21 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../scr/fixture/api.fixtures';
 import { LoginPage } from '../../scr/pom/login.page';
 import dotenv from 'dotenv';
 import { generateOtpCode } from '../../utils/otp.code'
-import { NewTransaction } from '../../scr/pom/new.transfer.page';
+import { BankingServicesPage } from '../../scr/pom/filter.transaction.page';
+import { ApiRequester } from '../../scr/apiRequester.mts';
 
-// import { execSync } from 'child_process';
+
 
 let otpCode: string;
+const apiRequester = new ApiRequester('https://banking-service.dev.aquaservices.aquanow.io/cjbank/unsecuredWebhook/');
 
 dotenv.config();
 // console.log(process.env.KEY);
 
 test.beforeEach(async({page})=> {
   await page.goto('https://admin-dev.aquanow.io')
+  
 
   const loginPage = new LoginPage(page);
   await loginPage.loginWithCredentials();
@@ -22,13 +25,20 @@ test.beforeEach(async({page})=> {
   await expect(page).toHaveURL(/dashboard/);
 });
 
-test('Finding Transaction', async ({ page }) => {
+test('Sorting Transaction', async ({ page, transaction_id  }) => {
+  console.log('Transaction ID:', transaction_id);
+
+  const bankingServicesPage = new BankingServicesPage(page);
+  await bankingServicesPage.filterTransaction(transaction_id);
+  await bankingServicesPage.mapTransaction();
+  await bankingServicesPage.fillTransactionDetails();
+
   
-   await expect(page).toHaveTitle('Banking Services');
-
-   const findTransaction = new NewTransaction(page);
-  //  await findTransaction.newTransaction(transaction_id);
-
-  await page.pause();
+  await expect(bankingServicesPage.bankingServicesHeader).toHaveText('Banking Services');
+  await expect(bankingServicesPage.statusFieldFailure).toContainText('Failure');
+  await expect(bankingServicesPage.statusFieldPending).toContainText('Review Pending');
 
 });
+
+
+

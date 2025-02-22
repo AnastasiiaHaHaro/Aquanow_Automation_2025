@@ -1,5 +1,5 @@
 import { test as base } from '@playwright/test';
-import { ApiRequester } from '../apiRequester.mjs';
+import { ApiRequester } from '../apiRequester.mts';
 import { requestData } from '../../utils/cjbankTestData';
 
 const apiRequester = new ApiRequester('https://banking-service.dev.aquaservices.aquanow.io/cjbank/unsecuredWebhook/');
@@ -11,35 +11,58 @@ export const test = base.extend<{
   status: number,
   transaction_id: string 
 }>({
-  apiRequester: async ({}, use: (arg: ApiRequester) => Promise<void>) => {
-    await use(apiRequester);
+
+
+  apiRequester: async ({}, use) => {
+    if (apiRequester) {
+      await use(apiRequester);
+    } else {
+      throw new Error("apiRequester is not defined");
+    }
   },
 
-  sentData: async ({ apiRequester }: { apiRequester: ApiRequester }, use: (arg: any) => Promise<void>) => {
-    const { requestData: sentData } = await apiRequester.createCJBankTestTransaction(requestData);
-    await use(sentData);
+  sentData: async ({ apiRequester }: { apiRequester: ApiRequester }, use: (sentData: any) => Promise<void>) => { 
+    if (apiRequester) {
+      const { requestData: sentData } = await apiRequester.createCJBankTestTransaction(requestData);
+      await use(sentData);
+    } else {
+      throw new Error("apiRequester is not defined");
+    }
   },
 
-  responseData: async ({ apiRequester }: { apiRequester: ApiRequester }, use: (arg: any) => Promise<void>) => {
-    const { responseData } = await apiRequester.createCJBankTestTransaction(requestData);
-    await use(responseData);
+  responseData: async ({ apiRequester }: { apiRequester: ApiRequester }, use: (responseData: any) => Promise<void>) => {  
+    if (apiRequester) {
+      const { responseData } = await apiRequester.createCJBankTestTransaction(requestData);
+      await use(responseData);
+    } else {
+      throw new Error("apiRequester is not defined");
+    }
   },
 
-  status: async ({ apiRequester }: { apiRequester: ApiRequester }, use: (arg: number) => Promise<void>) => {
-    const { status } = await apiRequester.createCJBankTestTransaction(requestData);
-    await use(status);
+  status: async ({ apiRequester }: { apiRequester: ApiRequester }, use: (status: number) => Promise<void>) => {  
+    if (apiRequester) {
+      const { status } = await apiRequester.createCJBankTestTransaction(requestData);
+      await use(status);
+    } else {
+      throw new Error("apiRequester is not defined");
+    }
   },
 
-  transaction_id: async ({ apiRequester }, use) => {
-    const { responseData } = await apiRequester.createCJBankTestTransaction(requestData);
-    const transaction_id = responseData.orderReference; 
-    console.log("Transaction ID:", transaction_id);
-    await use(transaction_id);
+  transaction_id: async ({ apiRequester }: { apiRequester: ApiRequester }, use: (transaction_id: string) => Promise<void>) => {  
+    if (apiRequester) {
+      const response = await apiRequester.createCJBankTestTransaction(requestData);
+      const transaction_id = response?.responseData?.transaction_id;
+      console.log("Transaction ID from API:", transaction_id); 
+      await use(transaction_id);  
+    } else {
+      throw new Error("apiRequester is not defined");
+    }
   }
 });
 
-
 export { expect } from '@playwright/test';
+
+// sessionStorage.setItem("key", "value");
 
 
 
