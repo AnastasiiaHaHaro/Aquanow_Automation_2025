@@ -1,4 +1,4 @@
-import { test, expect } from '../../scr/fixture/api.fixtures';
+import { test, expect } from '../scr/fixture/api.fixtures';
 
 test('Creating CJBankTestTransaction via API', async ({ responseData, status }) => {
   console.log('Response Data:', responseData);
@@ -6,4 +6,3 @@ test('Creating CJBankTestTransaction via API', async ({ responseData, status }) 
 
   expect(status).toBe(200);
 });
-

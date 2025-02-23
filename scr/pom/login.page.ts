@@ -11,10 +11,14 @@ export class LoginPage{
     }
     async loginWithCredentials(){
         
-        await this.page.locator('input[name="_vercel_password"]').fill('9tzx9fCp3k9i4o4-4eVDKKUL');
+        await this.page.locator('input[name="_vercel_password"]').fill(process.env.VERCEL_PASSWORD!);
         await this.page.locator("//button[@class='submit']").click();
+
+        // console.log("Loaded username:", process.env.USERNAME);
         await this.page.locator('input[placeholder="Enter your Username"]').fill("nastyagagaro@gmail.com");
-        await this.page.getByPlaceholder("Enter your Password").fill("P@$$w0RD123456");
+
+
+        await this.page.getByPlaceholder("Enter your Password").fill(process.env.PASSWORD!);
         await this.page.locator('button[type="submit"]').click();
     }
 

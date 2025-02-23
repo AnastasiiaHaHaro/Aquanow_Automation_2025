@@ -6,7 +6,6 @@ const apiRequester = new ApiRequester('https://banking-service.dev.aquaservices.
 
 export const test = base.extend<{ 
   apiRequester: ApiRequester, 
-  sentData: any, 
   responseData: any, 
   status: number,
   transaction_id: string 
@@ -16,15 +15,6 @@ export const test = base.extend<{
   apiRequester: async ({}, use) => {
     if (apiRequester) {
       await use(apiRequester);
-    } else {
-      throw new Error("apiRequester is not defined");
-    }
-  },
-
-  sentData: async ({ apiRequester }: { apiRequester: ApiRequester }, use: (sentData: any) => Promise<void>) => { 
-    if (apiRequester) {
-      const { requestData: sentData } = await apiRequester.createCJBankTestTransaction(requestData);
-      await use(sentData);
     } else {
       throw new Error("apiRequester is not defined");
     }
@@ -62,7 +52,6 @@ export const test = base.extend<{
 
 export { expect } from '@playwright/test';
 
-// sessionStorage.setItem("key", "value");
 
 
 

@@ -1,6 +1,5 @@
 import { Page } from "@playwright/test";
 
-
 export class BankingServicesPage{
     readonly page: Page;
     readonly bankingServicesHeader;
@@ -29,10 +28,8 @@ async filterTransaction(transaction_id: string){
     await this.page.waitForTimeout(2000);
     await this.page.locator('.MuiNativeSelect-select.MuiNativeSelect-standard').nth(1).selectOption({ value: 'tx_id' });
     await this.page.waitForTimeout(2000);
-    await this.page.locator('input[placeholder="Filter value"]').fill(transaction_id);
+    await this.page.locator('input[placeholder="Filter value"]').fill("7ba67081-c6df-413e-abdb-7fd15fbbdb29");
     await this.page.waitForTimeout(2000);
-
-    // await this.page.waitForSelector('//button[text()="Actions"]', { state: 'visible' }); 
     await this.page.locator('//button[text()="Actions"]').nth(0).click();
     await this.page.locator('//li[contains(text(),"Map Transaction")]').click();
 }
